@@ -1,4 +1,4 @@
-ARG PHP_VERSION
+ARG PHP_VERSION="8.1"
 
 FROM php:${PHP_VERSION}-apache-bullseye
 
@@ -20,20 +20,11 @@ RUN docker-php-ext-configure intl \
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get -y install nodejs
 RUN npm install -g yarn
+
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
  
-COPY cmd-vhost.conf /etc/apache2/sites-enabled/000-default.conf
+COPY 000-default.conf /etc/apache2/sites-enabled/000-default.conf
 COPY apache2.conf /etc/apache2/apache2.conf
 COPY ports.conf /etc/apache2/ports.conf
 
 # COPY php.ini /usr/local/etc/php/php.ini
-
-ARG WEBSITE_NAME
-
-WORKDIR /var/www/${WEBSITE_NAME}
-
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["apache2-foreground"]
