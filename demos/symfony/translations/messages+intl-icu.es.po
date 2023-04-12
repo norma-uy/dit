@@ -1,0 +1,20 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+
+msgid "page.home.title"
+msgstr "Inicio"
+
+msgid "page.error.title"
+msgstr "Error"
+
+msgid "page.error404.title"
+msgstr "Error 404"
+
+msgid "page.error403.title"
+msgstr "Error 403"
+
+msgid "Blog Template · Bootstrap v5.2"
+msgstr "__Blog Template · Bootstrap v5.2"

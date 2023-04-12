@@ -1,0 +1,315 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'Blog Template · Bootstrap v5.2'|trans }}
+{% endblock title %}
+
+{% block stylesheets %}
+    {% for cssFile in encore_entry_css_files('global', 'website-config') %}
+        <link rel="stylesheet" href="{{ cssFile }}" />
+    {% endfor %}
+    {% for cssFile in encore_entry_css_files('global-mobile', 'website-config') %}
+        <link rel="stylesheet" href="{{ cssFile }}" />
+    {% endfor %}
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {% for jsFile in encore_entry_js_files('app-post', 'website-config') %}
+        {% cspscript %}
+        <script nonce="{{ csp_nonce('script') }}" src="{{ asset(jsFile) }}" defer></script>
+        {% endcspscript %}
+    {% endfor %}
+{% endblock javascripts %}
+
+{% block header %}
+    {% include 'header.html.twig' %}
+{% endblock header %}
+
+{% block main %}
+    <main class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                {% if post %}
+                    <!-- Post content -->
+                    <article>
+                        <!-- Post header -->
+                        <header class="mb-4">
+                            <!-- Post title -->
+                            <h1 class="fw-bolder mb-1">
+                                {{ post.getTitle() }}
+                            </h1>
+                            <!-- Post meta content -->
+                            <div class="text-muted fst-italic mb-2">
+                                Publicado el {{ post.getPublishedAt()|date('d/m/Y') }} por {{ post.getAuthor().getName() }}
+                            </div>
+                            <!-- Post categories -->
+                            {# <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
+                            <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a> #}
+                        </header>
+                        <!-- Preview image figure -->
+                        <figure class="mb-4">
+                            <img class="img-fluid rounded" src="{{ vich_uploader_asset(post.getThumbnailPhoto(), 'originalFile') }}" alt="..." />
+                        </figure>
+
+                        {% set sliderData = not isMobile(app.request.headers.get('User-Agent'))
+                            ? desktopSlider
+                            : mobileSlider and mobileSlider['data'] is defined and mobileSlider['data'] is not empty
+                                ? mobileSlider
+                                : desktopSlider
+                        %}
+
+                        {% if
+                            sliderData is defined
+                                and sliderData['data'] is defined
+                                and sliderData['data'] is not empty %}
+                            {% set templateType = sliderData['templateType'] is defined
+                                ? sliderData['templateType']
+                                : null
+                            %}
+
+                            {% if templateType == 'full-width' %}
+                                {% set templateTypeClass = 'grid-1' %}
+                            {% elseif templateType == '1-2_1-2' %}
+                                {% set templateTypeClass = 'grid-1-1' %}
+                            {% elseif templateType == '2-3_1-3' %}
+                                {% set templateTypeClass = 'grid-2-1' %}
+                            {% elseif templateType == '1-3_2-3' %}
+                                {% set templateTypeClass = 'grid-1-2' %}
+                            {% elseif templateType == '1-3_1-3_1-3' %}
+                                {% set templateTypeClass = 'grid-1-1-1' %}
+                            {% endif %}
+                            {% set gallery = sliderData['data']|first %}
+
+                            <header>
+                                <!-- con slide -->
+                                <div id="slide-news" class="carousel slide" data-bs-ride="false">
+                                    <div class="carousel-inner">
+                                        {% for mediaData in gallery %}
+                                            {% if
+                                                mediaData
+                                                    and mediaData['jsonData'] is defined
+                                                    and mediaData['jsonData'] is not empty %}
+                                                {% if templateType == 'full-width' %}
+                                                        {% set imageWidth = '1920w' %}
+                                                    {% elseif templateType == '1-2_1-2' %}
+                                                        {% set imageWidth = '1280w' %}
+                                                    {% elseif templateType == '1-3_1-3_1-3' %}
+                                                        {% set imageWidth = '800w' %}
+                                                    {% elseif templateType == '2-3_1-3' and galleryIndex == '1' %}
+                                                        {% set imageWidth = '1280w' %}
+                                                    {% elseif templateType == '2-3_1-3' and galleryIndex == '2' %}
+                                                        {% set imageWidth = '800w' %}
+                                                    {% elseif templateType == '1-3_2-3' and galleryIndex == '1' %}
+                                                        {% set imageWidth = '800w' %}
+                                                    {% elseif templateType == '1-3_2-3' and galleryIndex == '2' %}
+                                                        {% set imageWidth = '1280w' %}
+                                                    {% endif %}
+
+                                                    {% set imageFile = mediaData['jsonData']['imageFile-' ~ imageWidth] %}
+
+                                                <div class="carousel-item ratio ratio-4x3 {{
+                                                    loop.first
+                                                        ? 'active'
+                                                        : ''
+                                                    }}">
+                                                    {% set mimeType = mediaData['jsonData']['mimeType'] %}
+                                                    {% set mimeType = mimeType|split('/') %}
+
+                                                    {% if mimeType[0] == 'image' %}
+                                                        <img src="{{ imageFile }}"
+                                                            class="d-block {{
+                                                            isMobile(app.request.headers.get('User-Agent'))
+                                                                ? 'movil'
+                                                                : 'pc'
+                                                            }}"
+                                                            alt="{{ mediaData['jsonData']['mediaTitle'] }}" />
+                                                    {% elseif mimeType[0] == 'video' %}
+                                                        <video loop
+                                                            muted
+                                                            playsinline
+                                                            class="d-block {{
+                                                            isMobile(app.request.headers.get('User-Agent'))
+                                                                ? 'movil'
+                                                                : 'pc'
+                                                            }}"
+                                                            src="{{ mediaData['jsonData']['originalFile'] }}"></video>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    {% if (gallery|length) > 1 %}
+                                        <button class="carousel-control-prev"
+                                            type="button"
+                                            data-bs-target="#slide-news"
+                                            data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next"
+                                            type="button"
+                                            data-bs-target="#slide-news"
+                                            data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    {% endif %}
+                                </div>
+                                <!-- end slide -->
+                            </header>
+                        {% endif %}
+
+                        <!-- Post content -->
+                        <section class="mb-5">
+                            {{ post.getContent()|raw }}
+                        </section>
+                    </article>
+                {% endif %}
+                <!-- Comments section -->
+                {# <section class="mb-5">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <!-- Comment form -->
+                            <form class="mb-4">
+                                <textarea class="form-control"
+                                    rows="3"
+                                    placeholder="Join the discussion and leave a comment!"></textarea>
+                            </form>
+                            <!-- Comment with nested comments -->
+                            <div class="d-flex mb-4">
+                                <!-- Parent comment -->
+                                <div class="flex-shrink-0">
+                                    <img class="rounded-circle"
+                                        src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+                                        alt="..." />
+                                </div>
+                                <div class="ms-3">
+                                    <div class="fw-bold">
+                                        Commenter Name
+                                    </div>If you're going to lead a space frontier, it has to be government; it'll never
+                                    be private enterprise. Because the space frontier is dangerous, and it's expensive,
+                                    and it has unquantified risks.
+                                    <!-- Child comment 1 -->
+                                    <div class="d-flex mt-4">
+                                        <div class="flex-shrink-0">
+                                            <img class="rounded-circle"
+                                                src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+                                                alt="..." />
+                                        </div>
+                                        <div class="ms-3">
+                                            <div class="fw-bold">
+                                                Commenter Name
+                                            </div>And under those conditions, you cannot establish a capital-market
+                                            evaluation of that enterprise. You can't get investors.
+                                        </div>
+                                    </div>
+                                    <!-- Child comment 2 -->
+                                    <div class="d-flex mt-4">
+                                        <div class="flex-shrink-0">
+                                            <img class="rounded-circle"
+                                                src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+                                                alt="..." />
+                                        </div>
+                                        <div class="ms-3">
+                                            <div class="fw-bold">
+                                                Commenter Name
+                                            </div>When you put money directly to a problem, it makes a good headline.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Single comment -->
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <img class="rounded-circle"
+                                        src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+                                        alt="..." />
+                                </div>
+                                <div class="ms-3">
+                                    <div class="fw-bold">
+                                        Commenter Name
+                                    </div>When I look at the universe and all the ways the universe wants to kill us, I
+                                    find it hard to reconcile that with statements of beneficence.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section> #}
+            </div>
+            <!-- Side widgets -->
+            <div class="col-lg-4">
+                <!-- Search widget -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Search
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group">
+                            <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                            <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Categories widget -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Categorías
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="list-unstyled mb-0">
+                                    {% if post and post.getPostCategories() %}
+                                        {% for postCategory in post.getPostCategories() %}
+                                            <li><a href="#!">{{ postCategory.getTitle() }}</a></li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Side widget -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Ultimas publicaciones
+                    </div>
+                    <div class="card-body">
+                        {% for lastNew in lastNews %}
+                            <a class="mod-noticia aside"
+                                href="{{
+                                path(
+                                    'post-index-page',
+                                    {
+                                        slug: lastNew.getSlug()
+                                    }
+                                )
+                                }}">
+                                <figure class="ratio ratio-4x3">
+                                    <img src="{{ vich_uploader_asset(lastNew.getThumbnailPhoto(), 'imageFile800w') }}" alt="post photo" title="" />
+                                </figure>
+                                <section>
+                                    <h6 class="mb-0">
+                                        {{ lastNew.getTitle() }}
+                                    </h6>
+                                </section>
+                                <footer>
+                                    <div>
+                                        <time>{{ lastNew.getPublishedAt()|date('d/m/Y') }}</time>
+                                    </div>
+                                    <span>leer más<i class="ico ico-mas"></i></span>
+                                </footer>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock main %}
+
+{# FOOTER #}
+{% block footer %}
+    {% include 'footer.html.twig' %}
+{% endblock footer %}
+{# / FOOTER #}

@@ -1,0 +1,338 @@
+<div class="container">
+    <nav>
+        <div class="nav nav-tabs my-2" id="nav-tab" role="tablist">
+            <button class="nav-link py-1 px-4 active"
+                id="nav-select-media-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-select-media"
+                type="button"
+                role="tab"
+                aria-controls="nav-select-media"
+                aria-selected="false">
+                Seleccionar
+            </button>
+            {# <button class="nav-link py-1 px-4" id="nav-upload-media-tab" data-bs-toggle="tab" data-bs-target="#nav-upload-media" type="button" role="tab" aria-controls="nav-upload-media" aria-selected="true">Cargar nuevo archivo</button> #}
+        </div>
+    </nav>
+    <div class="tab-content my-2 px-2" id="nav-tabContent">
+        <div class="tab-pane fade show active"
+            id="nav-select-media"
+            role="tabpanel"
+            aria-labelledby="nav-select-media-tab">
+            <div class="gallery-form-container row">
+                <div class="row col-md-12">
+                    <div class="col-12">
+                        <div class="mb-3 row">
+                            <label class="col-form-label col-sm-2 required" for="template-type-selector">
+                                Plantilla
+                            </label>
+                            <div class="col-sm-10">
+                                <select id="template-type-selector" class="form-select">
+                                    <option value="full-width">
+                                        Ancho completo
+                                    </option>
+                                    <option value="1-2_1-2">
+                                        1/2 + 1/2
+                                    </option>
+                                    <option value="2-3_1-3">
+                                        2/3 + 1/3
+                                    </option>
+                                    <option value="1-3_2-3">
+                                        1/3 + 2/3
+                                    </option>
+                                    <option value="1-3_1-3_1-3">
+                                        1/3 + 1/3 + 1/3
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 gallery-column-btns">
+                        <div class="column-btns active" id="full-width-column">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" data-key="1" class="active">Ancho completo</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column-btns" id="1-2_1-2-column">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="button" data-key="1">Galería 1</button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" data-key="2">Galería 2</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column-btns" id="2-3_1-3-column">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="button" data-key="1">Galería 1</button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" data-key="2">Galería 2</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column-btns" id="1-3_2-3-column">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="button" data-key="1">Galería 1</button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" data-key="2">Galería 2</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column-btns" id="1-3_1-3_1-3-column">
+                            <div class="row">
+                                <div class="col-4">
+                                    <button type="button" data-key="1">Galería 1</button>
+                                </div>
+                                <div class="col-4">
+                                    <button type="button" data-key="2">Galería 2</button>
+                                </div>
+                                <div class="col-4">
+                                    <button type="button" data-key="3">Galería 3</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if galleryData is defined and galleryData is not empty and galleryType == 'gallery' %}
+                        <div class="media-list col-12 {{ enableTextFields ? 'enable-text-fields' : '' }}"
+                            id="media-list"
+                            data-template-type="{{ galleryData['templateType'] }}">
+                            {% for galleryColumnKey, galleryColumn in galleryData['data'] %}
+                                <section class="gallery-column selected {{ loop.first ? 'active' : '' }}"
+                                    id="gallery-column-{{ galleryColumnKey }}"
+                                    data-key="{{ galleryColumnKey }}">
+                                    {% if (galleryColumn|length) > 0 %}
+                                        {% for mediaItemId, mediaItem in galleryColumn %}
+                                            <div class="media-item"
+                                                id="media-item-{{ mediaItemId }}"
+                                                data-id="{{ mediaItemId }}"
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="Mateo Mac Mullen"
+                                                role="option"
+                                                aria-grabbed="false">
+                                                <div class="controls">
+                                                    <button type="button"
+                                                        class="btn btn-link order-btn"
+                                                        draggable="true">
+                                                        <i class="fa-solid fa-up-down-left-right"></i>
+                                                    </button>
+                                                    <button type="button"
+                                                        class="btn btn-link-danger delete-btn"
+                                                        data-template-type="{{ galleryData['templateType'] }}"
+                                                        data-gallery-column-key="{{ galleryColumnKey }}"
+                                                        data-media-item-id="{{ mediaItemId }}">
+                                                        <i class="far fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                                <figure>
+                                                    {% set mimeType = mediaItem['jsonData']['mimeType'] %}
+                                                    {% set mimeType = mimeType|split('/') %}
+
+                                                    {% if mimeType[0] == 'image' %}
+                                                        <img id="thumbnail-{{ mediaItemId }}"
+                                                            src="{{ mediaItem['jsonData']['imageFile-450w'] }}"
+                                                            data-id="{{ mediaItemId }}"
+                                                            alt="" />
+                                                    {% elseif mimeType[0] == 'video' %}
+                                                        <video loop
+                                                            muted
+                                                            id="thumbnail-{{ mediaItemId }}"
+                                                            src="{{ mediaItem['jsonData']['originalFile'] }}"
+                                                            data-id="{{ mediaItemId }}"></video>
+                                                    {% endif %}
+
+                                                    <div class="form-check">
+                                                        <input type="checkbox"
+                                                            id="media-checkbox-{{ mediaItemId }}"
+                                                            class="media-check form-check-input"
+                                                            data-image-file-150w="{{
+                                                            mediaItem['jsonData']['imageFile-150w']
+                                                            }}"
+                                                            data-image-file-450w="{{
+                                                            mediaItem['jsonData']['imageFile-450w']
+                                                            }}"
+                                                            data-image-file-800w="{{
+                                                            mediaItem['jsonData']['imageFile-800w']
+                                                            }}"
+                                                            data-image-file-1280w="{{
+                                                            mediaItem['jsonData']['imageFile-1280w']
+                                                            }}"
+                                                            data-image-file-1600w="{{
+                                                            mediaItem['jsonData']['imageFile-1600w']
+                                                            }}"
+                                                            data-image-file-1920w="{{
+                                                            mediaItem['jsonData']['imageFile-1920w']
+                                                            }}"
+                                                            data-image-file-2400w="{{
+                                                            mediaItem['jsonData']['imageFile-2400w']
+                                                            }}"
+                                                            data-original-file="{{
+                                                            mediaItem['jsonData']['originalFile']
+                                                            }}"
+                                                            data-media-title="{{ mediaItem['jsonData']['mediaTitle'] }}"
+                                                            data-mime-type="{{ mediaItem['jsonData']['mimeType'] }}"
+                                                            value="{{ mediaItemId }}"
+                                                            checked="checked" />
+                                                        <label class="form-check-label"
+                                                            for="media_collection_library_mediaList_67">
+                                                            {{ mediaItem['jsonData']['mediaTitle'] }}
+                                                        </label>
+                                                    </div>
+                                                </figure>
+
+                                                {% if enableTextFields %}
+                                                    <input type="text"
+                                                        value="{{
+                                                        mediaItem['jsonData']['txtEs'] is defined
+                                                            ? mediaItem['jsonData']['txtEs']
+                                                            : ''
+                                                        }}"
+                                                        id="media-txt-es-{{ mediaItemId }}"
+                                                        data-id="{{ mediaItemId }}"
+                                                        class="form-control"
+                                                        placeholder="Texto en español" />
+                                                    <hr />
+                                                    <input type="text"
+                                                        value="{{
+                                                        mediaItem['jsonData']['txtEn'] is defined
+                                                            ? mediaItem['jsonData']['txtEn']
+                                                            : ''
+                                                        }}"
+                                                        id="media-txt-en-{{ mediaItemId }}"
+                                                        data-id="{{ mediaItemId }}"
+                                                        class="form-control"
+                                                        placeholder="Texto en ingles" />
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex">
+                                                            <input type="radio"
+                                                                class="btn-check m-auto"
+                                                                id="media-position-1-{{ mediaItemId }}"
+                                                                name="media-position-{{ mediaItemId }}"
+                                                                value="1"
+                                                                {{
+                                                                mediaItem['jsonData']['position'] is defined
+                                                                    and mediaItem['jsonData']['position'] == 1
+                                                                    ? 'checked'
+                                                                    : ''
+                                                                }}
+                                                                autocomplete="off" />
+                                                            <label class="btn btn-outline-primary m-auto"
+                                                                for="media-position-1-{{ mediaItemId }}">
+                                                                <i class="fa-solid fa-border-top-left"></i>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-6 d-flex">
+                                                            <input type="radio"
+                                                                class="btn-check m-auto"
+                                                                id="media-position-2-{{ mediaItemId }}"
+                                                                name="media-position-{{ mediaItemId }}"
+                                                                value="2"
+                                                                {{
+                                                                mediaItem['jsonData']['position'] is defined
+                                                                    and mediaItem['jsonData']['position'] == 2
+                                                                    ? 'checked'
+                                                                    : ''
+                                                                }}
+                                                                autocomplete="off" />
+                                                            <label class="btn btn-outline-primary m-auto"
+                                                                for="media-position-2-{{ mediaItemId }}">
+                                                                <i class="fa-solid fa-arrows-to-dot"></i>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex">
+                                                            <input type="radio"
+                                                                class="btn-check m-auto"
+                                                                id="media-color-1-{{ mediaItemId }}"
+                                                                name="media-color-{{ mediaItemId }}"
+                                                                value="fff"
+                                                                {{
+                                                                mediaItem['jsonData']['color'] is defined
+                                                                    and mediaItem['jsonData']['color'] == 'fff'
+                                                                    ? 'checked'
+                                                                    : ''
+                                                                }}
+                                                                autocomplete="off" />
+                                                            <label class="btn btn-outline-primary m-auto"
+                                                                for="media-color-1-{{ mediaItemId }}">
+                                                                Blanco
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-6 d-flex">
+                                                            <input type="radio"
+                                                                class="btn-check m-auto"
+                                                                id="media-color-2-{{ mediaItemId }}"
+                                                                name="media-color-{{ mediaItemId }}"
+                                                                value="000"
+                                                                {{
+                                                                mediaItem['jsonData']['color'] is defined
+                                                                    and mediaItem['jsonData']['color'] == '000'
+                                                                    ? 'checked'
+                                                                    : ''
+                                                                }}
+                                                                autocomplete="off" />
+                                                            <label class="btn btn-outline-primary m-auto"
+                                                                for="media-color-2-{{ mediaItemId }}">
+                                                                Negro
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+
+                                                <input type="hidden"
+                                                    value="{{ mediaItem['jsonData']['order'] }}"
+                                                    id="media-order-{{ mediaItemId }}"
+                                                    data-id="{{ mediaItemId }}"
+                                                    class="order"
+                                                    readonly="" />
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <p class="media-empty">
+                                            No hay elementos
+                                        </p>
+                                    {% endif %}
+                                </section>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="media-list col-12 {{ enableTextFields ? 'enable-text-fields' : '' }}"
+                            id="media-list">
+                            <p class="media-empty">
+                                No hay elementos
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    <button type="button" class="btn btn-primary" id="open-image-picker-btn">
+                        Buscar en la galería de medios
+                    </button>
+                </div>
+                <div class="loader">
+                    <div class="spinner-border text-info" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div class="image-picker-modal" id="image-picker-modal">
+                    <div class="dialog">
+                        <div class="content p-4" id="image-picker-list">
+                            {% include 'admin/mediaLibrary/gallery_image_picker.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

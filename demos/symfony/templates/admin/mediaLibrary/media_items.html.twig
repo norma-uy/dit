@@ -1,0 +1,59 @@
+{% if mediaItems %}
+    {% for media in mediaItems %}
+        <div class="media-item"
+            id="{{ 'media-item-' ~ media.getID() }}"
+            data-id="{{ media.getID() }}"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="{{ media.getTitle() }}">
+            <div class="controls"></div>
+            <figure>
+                {% set mimeType = media.getMimeType() %}
+                {% set mimeType = mimeType|split('/') %}
+
+                {% if mimeType[0] == 'image' %}
+                    <img id="thumbnail-{{ media.getID() }}"
+                        src="{{ vich_uploader_asset(media, 'imageFile450w') }}"
+                        data-id="{{ media.getID() }}"
+                        alt="" />
+                {% elseif mimeType[0] == 'video' %}
+                    <video loop
+                        muted
+                        id="thumbnail-{{ media.getID() }}"
+                        src="{{ vich_uploader_asset(media, 'originalFile') }}"
+                        data-id="{{ media.getID() }}"></video>
+                    <i class="fa-solid fa-video"></i>
+                {% endif %}
+                <div class="form-check">
+                    <input type="checkbox"
+                        id="{{ 'media-checkbox-' ~ media.getID() }}"
+                        class="media-check form-check-input"
+                        data-image-file-150w="{{ vich_uploader_asset(media, 'imageFile150w') }}"
+                        data-image-file-450w="{{ vich_uploader_asset(media, 'imageFile450w') }}"
+                        data-image-file-800w="{{ vich_uploader_asset(media, 'imageFile800w') }}"
+                        data-image-file-1280w="{{ vich_uploader_asset(media, 'imageFile1280w') }}"
+                        data-image-file-1600w="{{ vich_uploader_asset(media, 'imageFile1600w') }}"
+                        data-image-file-1920w="{{ vich_uploader_asset(media, 'imageFile1920w') }}"
+                        data-image-file-2400w="{{ vich_uploader_asset(media, 'imageFile2400w') }}"
+                        data-original-file="{{ vich_uploader_asset(media, 'originalFile') }}"
+                        data-media-title="{{ media.getTitle() }}"
+                        data-mime-type="{{ media.getMimeType() }}"
+                        value="{{ media.getID() }}" />
+                    <label class="form-check-label" for="media_collection_library_mediaList_67">
+                        barisdemiroz-63e24bf62571c745179760.jpg
+                    </label>
+                </div>
+            </figure>
+            <input type="hidden"
+                value="{{ loop.index }}"
+                id="{{ 'media-order-' ~ media.getID() }}"
+                data-id="{{ media.getID() }}"
+                class="order"
+                readonly />
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="media-empty">
+        No hay elementos
+    </p>
+{% endif %}

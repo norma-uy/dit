@@ -1,0 +1,48 @@
+{% set locale = app.request.get('_locale') %}
+
+{% block head_metas %}
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noodp, noimageindex, notranslate, nocache" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+    <meta name="generator" content="EasyAdmin" />
+
+    {% if app.environment == 'dev' %}
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    {% endif %}
+
+    <title>
+        {{ title }}
+    </title>
+{% endblock head_metas %}
+
+{% block head_stylesheets %}
+    {{ encore_entry_link_tags('app', null, 'admin-config') }}
+{% endblock head_stylesheets %}
+
+{% block head_javascript %}
+    {{ encore_entry_script_tags('app', null, 'admin-config') }}
+{% endblock head_javascript %}
+
+{% block head_favicon %}
+    <link rel="shortcut icon" href="{{ asset('/build/website/images/favicon/favicon.ico') }}" />
+{% endblock head_favicon %}
+
+{% block body %}
+    <body>
+        {% block javascript_page_layout %}
+            {{ encore_entry_script_tags('page-layout', null, 'admin-config') }}
+        {% endblock javascript_page_layout %}
+        {% block javascript_page_color_scheme %}
+            {{ encore_entry_script_tags('page-color-scheme', null, 'admin-config') }}
+        {% endblock javascript_page_color_scheme %}
+
+        {% block wrapper_wrapper %}
+            <div class="wrapper"></div>
+        {% endblock wrapper_wrapper %}
+
+        {% block body_javascript %}
+
+        {% endblock body_javascript %}
+    </body>
+{% endblock body %}

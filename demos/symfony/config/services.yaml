@@ -1,0 +1,56 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    timezone: '%env(APP_TIMEZONE)%'
+    lang: '%env(APP_LANG)%'
+    website.urlBase: '%env(APP_WEBSITE_URL_BASE)%'
+    website.name: '%env(APP_WEBSITE_NAME)%'
+    website.maintenance_mode: '%env(APP_WEBSITE_MAINTENANCE_MODE)%'
+    tmp_storage_path: '%env(TMP_STORAGE_PATH)%'
+    media_storage_path: '%env(MEDIA_STORAGE_PATH)%'
+    media_storage_path_index: '%env(MEDIA_STORAGE_PATH_INDEX)%'
+    email_config.from_email: '%env(EMAIL_CONFIG_FROM_EMAIL)%'
+    email_config.from_name: '%env(EMAIL_CONFIG_FROM_NAME)%'
+    email_config.contact_to_email: '%env(EMAIL_CONFIG_CONTACT_TO_EMAIL)%'
+    email_config.contact_to_name: '%env(EMAIL_CONFIG_CONTACT_TO_NAME)%'
+    google_recaptcha_site_domain: '%env(GOOGLE_RECAPTCHA_SITE_DOMAIN)%'
+    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\EventListener\MediaListener:
+        tags:
+            - { name: kernel.event_listener, event: vich_uploader.post_upload }
+            - { name: kernel.event_listener, event: vich_uploader.post_inject }
+
+    App\EventListener\ControllerListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller }
+
+    App\Form\Admin\Field\Configurator\:
+        resource: '../src/Form/Admin/Field/Configurator/*'
+        tags:
+            - { name: 'ea.field_configurator', priority: -1 }
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+when@prod:
+    parameters:
+        container.dumper.inline_factories: true

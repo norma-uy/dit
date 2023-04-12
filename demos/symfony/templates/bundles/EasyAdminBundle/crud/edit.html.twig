@@ -1,0 +1,99 @@
+{% extends '@!EasyAdmin/crud/edit.html.twig' %}
+
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+
+{% block body_id 'ea-edit-' ~ entity.name ~ '-' ~ entity.primaryKeyValue %}
+{% block body_class 'ea-edit ea-edit-' ~ entity.name %}
+
+{% set ea_field_assets = ea.crud.fieldAssets(constant('EasyCorp\\Bundle\\EasyAdminBundle\\Config\\Crud::PAGE_EDIT')) %}
+
+{% block head_javascript %}
+    {# {{ parent() }} #}
+    {# <script src="{{ asset('form.js', ea.assets.defaultAssetPackageName) }}"></script> #}
+
+    {% for jsFile in encore_entry_js_files('app', 'admin-config') %}
+        {% cspscript %}
+        <script nonce="{{ csp_nonce('script') }}" src="{{ asset(jsFile) }}" defer></script>
+        {% endcspscript %}
+    {% endfor %}
+
+    {% for jsFile in encore_entry_js_files('form', 'admin-config') %}
+        {% cspscript %}
+        <script nonce="{{ csp_nonce('script') }}" src="{{ asset(jsFile) }}" defer></script>
+        {% endcspscript %}
+    {% endfor %}
+{% endblock head_javascript %}
+
+{% block configured_head_contents %}
+    {{ parent() }}
+    {% for htmlContent in ea_field_assets.headContents %}
+        {{ htmlContent|raw }}
+    {% endfor %}
+{% endblock configured_head_contents %}
+
+{% block configured_body_contents %}
+    {{ parent() }}
+    {% for htmlContent in ea_field_assets.bodyContents %}
+        {{ htmlContent|raw }}
+    {% endfor %}
+{% endblock configured_body_contents %}
+
+{% block configured_stylesheets %}
+    {{ parent() }}
+{% endblock configured_stylesheets %}
+
+{% block configured_javascripts %}
+    {{ parent() }}
+{% endblock configured_javascripts %}
+
+{% block content_title %}
+    {%- apply spaceless -%}
+    {% set custom_page_title =
+        ea.crud.customPageTitle(pageName, entity ? entity.instance : null, ea.i18n.translationParameters)
+    %}
+    {{ custom_page_title is null
+        ? ea.crud.defaultPageTitle(null, null, ea.i18n.translationParameters)|trans|raw
+        : custom_page_title|trans|raw }}:
+    {%- endapply -%}
+
+    {% if _context.entity is defined and _context.entity.instance.title is defined %}
+
+        {% set entityLocale = _context.entity.instance.getTranslations() is defined ? _context.entity.instance.getTranslations()|filter(lang => lang.getLanguageCode() == locale)|first : null %}
+        {% set entityLocale = entityLocale is not empty ? entityLocale : _context.entity.instance %}
+
+        <mark class="">{{ entityLocale.getTitle() }}</mark>
+    {% endif %}
+{% endblock content_title %}
+
+{% block page_actions %}
+    {% for action in entity.actions %}
+        {{
+            include(
+                action.templatePath,
+                {
+                    action: action
+                },
+                with_context = false
+            )
+        }}
+    {% endfor %}
+{% endblock page_actions %}
+
+{% block main %}
+    {% block edit_form %}
+        {{ form(edit_form) }}
+    {% endblock edit_form %}
+
+    {% block delete_form %}
+        {{
+            include(
+                '@EasyAdmin/crud/includes/_delete_form.html.twig',
+                {
+                    entity_id: entity.primaryKeyValue
+                },
+                with_context = false
+            )
+        }}
+    {% endblock delete_form %}
+{% endblock main %}

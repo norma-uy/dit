@@ -1,0 +1,39 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+{% set images = field.formattedValue %}
+
+{% set html_id = 'ea-lightbox-' ~ field.uniqueId %}
+
+{% set mimeType = instanceOf(entity.instance, 'App\\Entity\\Media') ? entity.instance.getMimeType()|split('/') : null %}
+
+{% if mimeType is not empty and mimeType[0] in ['image', 'video'] %}
+    {% if mimeType[0] == 'image' %}
+        <a href="#" class="ea-lightbox-thumbnail" data-bs-toggle="modal" data-bs-target="#{{ html_id }}">
+            <img src="{{ vich_uploader_asset(entity.instance, 'imageFile150w') }}" class="img-fluid" />
+        </a>
+
+        <div class="modal fade modal-thumbnail" id="{{ html_id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <img src="{{ vich_uploader_asset(entity.instance, 'imageFile800w') }}" />
+                </div>
+            </div>
+        </div>
+    {% elseif mimeType[0] == 'video' %}
+        <a href="#" class="ea-lightbox-thumbnail" data-bs-toggle="modal" data-bs-target="#{{ html_id }}">
+            <video loop
+                muted
+                src="{{ vich_uploader_asset(entity.instance, 'originalFile') }}"
+                style="width: 80px; margin-right:10px;"></video>
+        </a>
+
+        <div class="modal fade modal-thumbnail" id="{{ html_id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <video loop muted src="{{ vich_uploader_asset(entity.instance, 'originalFile') }}" controls></video>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

@@ -1,0 +1,61 @@
+{% set pageName = app.request.get('_route') %}
+{% set locale = app.request.get('_locale') %}
+
+{% set webName = 'Blog Template' %}
+
+<!DOCTYPE html>
+<html lang="{{ locale }}">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+        <meta name="Description" content="{{ website.name }}" />
+        <meta name="Keywords" content="template,symfony,cygnus" />
+        <meta name="title" content="{{ website.name }}" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="theme-color" content="#509F2C" />
+        <meta name="msapplication-navbutton-color" content="#509F2C" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="#509F2C" />
+
+        {% if app.environment == 'dev' %}
+            <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+        {% endif %}
+
+        <title>
+            {% block title %}
+                {{ website.name }}
+            {% endblock title %}
+        </title>
+
+        <link rel="icon" href="{{ asset('build/website/images/favicon.svg') }}" />
+
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {% block stylesheets %}
+
+        {% endblock stylesheets %}
+    </head>
+    <body>
+        <header id="header" role="banner">
+            {% block header %}
+
+            {% endblock header %}
+        </header>
+
+        <main id="main" role="main" class="main-{{ pageName }}">
+            {% block main %}
+
+            {% endblock main %}
+        </main>
+
+        <footer id="footer" role="contentinfo">
+            {% block footer %}
+
+            {% endblock footer %}
+        </footer>
+
+        {% block javascripts %}
+
+        {% endblock javascripts %}
+    </body>
+</html>

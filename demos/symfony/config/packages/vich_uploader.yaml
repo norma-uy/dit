@@ -1,0 +1,104 @@
+vich_uploader:
+    db_driver: orm
+    storage: flysystem
+
+    metadata:
+        type: attribute
+
+    mappings:
+        media.original:
+            uri_prefix: '%media_storage_path_index%/original'
+            upload_destination: storage.media.original
+            directory_namer:
+                service: Vich\UploaderBundle\Naming\CurrentDateTimeDirectoryNamer
+                options:
+                    date_time_format: 'Y-m-d' # will create directory "2018/23/09" for curent date "2018-09-23"
+                    date_time_property: createdAt # see above example
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
+        media.150w:
+            uri_prefix: '%media_storage_path_index%/150w'
+            upload_destination: storage.media.150w
+            directory_namer:
+                service: Vich\UploaderBundle\Naming\CurrentDateTimeDirectoryNamer
+                options:
+                    date_time_format: 'Y-m-d' # will create directory "2018/23/09" for curent date "2018-09-23"
+                    date_time_property: createdAt # see above example
+            namer: Vich\UploaderBundle\Naming\OrignameNamer
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
+        media.450w:
+            uri_prefix: '%media_storage_path_index%/450w'
+            upload_destination: storage.media.450w
+            directory_namer:
+                service: Vich\UploaderBundle\Naming\CurrentDateTimeDirectoryNamer
+                options:
+                    date_time_format: 'Y-m-d' # will create directory "2018/23/09" for curent date "2018-09-23"
+                    date_time_property: createdAt # see above example
+            namer: Vich\UploaderBundle\Naming\OrignameNamer
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
+        media.800w:
+            uri_prefix: '%media_storage_path_index%/800w'
+            upload_destination: storage.media.800w
+            directory_namer:
+                service: Vich\UploaderBundle\Naming\CurrentDateTimeDirectoryNamer
+                options:
+                    date_time_format: 'Y-m-d' # will create directory "2018/23/09" for curent date "2018-09-23"
+                    date_time_property: createdAt # see above example
+            namer: Vich\UploaderBundle\Naming\OrignameNamer
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
+        media.1280w:
+            uri_prefix: '%media_storage_path_index%/1280w'
+            upload_destination: storage.media.1280w
+            directory_namer:
+                service: Vich\UploaderBundle\Naming\CurrentDateTimeDirectoryNamer
+                options:
+                    date_time_format: 'Y-m-d' # will create directory "2018/23/09" for curent date "2018-09-23"
+                    date_time_property: createdAt # see above example
+            namer: Vich\UploaderBundle\Naming\OrignameNamer
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
+        media.1600w:
+            uri_prefix: '%media_storage_path_index%/1600w'
+            upload_destination: storage.media.1600w
+            directory_namer:
+                service: Vich\UploaderBundle\Naming\CurrentDateTimeDirectoryNamer
+                options:
+                    date_time_format: 'Y-m-d' # will create directory "2018/23/09" for curent date "2018-09-23"
+                    date_time_property: createdAt # see above example
+            namer: Vich\UploaderBundle\Naming\OrignameNamer
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
+        media.1920w:
+            uri_prefix: '%media_storage_path_index%/1920w'
+            upload_destination: storage.media.1920w
+            directory_namer:
+                service: Vich\UploaderBundle\Naming\CurrentDateTimeDirectoryNamer
+                options:
+                    date_time_format: 'Y-m-d' # will create directory "2018/23/09" for curent date "2018-09-23"
+                    date_time_property: createdAt # see above example
+            namer: Vich\UploaderBundle\Naming\OrignameNamer
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
+        media.2400w:
+            uri_prefix: '%media_storage_path_index%/2400w'
+            upload_destination: storage.media.2400w
+            directory_namer:
+                service: Vich\UploaderBundle\Naming\CurrentDateTimeDirectoryNamer
+                options:
+                    date_time_format: 'Y-m-d' # will create directory "2018/23/09" for curent date "2018-09-23"
+                    date_time_property: createdAt # see above example
+            namer: Vich\UploaderBundle\Naming\OrignameNamer
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true

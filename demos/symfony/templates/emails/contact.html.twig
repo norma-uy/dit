@@ -1,0 +1,48 @@
+{% apply inline_css %}
+
+<style>
+    .container { width: 100%; font-family: arial, 'helvetica neue', helvetica, sans-serif; -webkit-text-size-adjust:
+    100%; -ms-text-size-adjust: 100%; padding: 0; margin: 0; background-color: #FFFFFF; }
+
+    .body { width: 100%; }
+
+    .body .header { background-color: #EFEFEF; width: 600px; }
+
+    .body .content { background-color: #EFEFEF; width: 600px; }
+</style>
+
+<div class="container">
+    <div class="body">
+        <div class="header">
+            <a href="{{ url('home-page') }}">
+                {# <img src="{{ absolute_url(asset('build/website/images/logo.png')) }}"
+                    alt="Blog Website" /> #}
+            </a>
+        </div>
+
+        <div class="content">
+            {% if contact %}
+                <ul>
+                    <li>
+                        Nombre:
+                        {{ contact.getName() }}
+                    </li>
+                    <li>
+                        Email:
+                        <a href="mailto:{{ contact.getEmail() }}">{{ contact.getEmail() }}</a>
+                    </li>
+                    <li>
+                        Télefono:
+                        {{ contact.getPhone() }}
+                    </li>
+                    <li>
+                        Mensaje:<p>
+                            {{ contact.getMessage() }}
+                        </p>
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endapply %}

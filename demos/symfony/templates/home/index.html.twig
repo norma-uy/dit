@@ -1,0 +1,326 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'Blog Template · Bootstrap v5.2'|trans }}
+{% endblock title %}
+
+{% block stylesheets %}
+    {% for cssFile in encore_entry_css_files('global', 'website-config') %}
+        <link rel="stylesheet" href="{{ cssFile }}" />
+    {% endfor %}
+    {% for cssFile in encore_entry_css_files('global-mobile', 'website-config') %}
+        <link rel="stylesheet" href="{{ cssFile }}" />
+    {% endfor %}
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {% for jsFile in encore_entry_js_files('app-home', 'website-config') %}
+        {% cspscript %}
+        <script nonce="{{ csp_nonce('script') }}" src="{{ asset(jsFile) }}" defer></script>
+        {% endcspscript %}
+    {% endfor %}
+{% endblock javascripts %}
+
+{% block header %}
+    {% include 'header.html.twig' %}
+{% endblock header %}
+
+{% block main %}
+    <main class="container">
+
+        <section class="mod-slider {{ isMobile(app.request.headers.get('User-Agent')) ? 'movil' : 'pc' }}">
+            {% set sliderData = not isMobile(app.request.headers.get('User-Agent'))
+                ? desktopSlider
+                : mobileSlider and mobileSlider['data'] is defined and mobileSlider['data'] is not empty
+                    ? mobileSlider
+                    : desktopSlider
+            %}
+
+            {% if sliderData is defined and sliderData['data'] is defined and sliderData['data'] is not empty %}
+                {% set templateType = sliderData['templateType'] is defined ? sliderData['templateType'] : null %}
+
+                {% if templateType == 'full-width' %}
+                    {% set templateTypeClass = 'grid-1' %}
+                {% elseif templateType == '1-2_1-2' %}
+                    {% set templateTypeClass = 'grid-1-1' %}
+                {% elseif templateType == '2-3_1-3' %}
+                    {% set templateTypeClass = 'grid-2-1' %}
+                {% elseif templateType == '1-3_2-3' %}
+                    {% set templateTypeClass = 'grid-1-2' %}
+                {% elseif templateType == '1-3_1-3_1-3' %}
+                    {% set templateTypeClass = 'grid-1-1-1' %}
+                {% endif %}
+
+                <section class="grid {{ templateTypeClass }}">
+                    {% for galleryIndex, gallery in sliderData['data'] %}
+                        <div class="grid-content">
+                            <figure>
+                                {% if (gallery|length) < 2 %}
+                                    {% set mediaData = gallery|first %}
+                                    {% if
+                                        mediaData
+                                            and mediaData['jsonData'] is defined
+                                            and mediaData['jsonData'] is not empty %}
+                                        {% if templateType == 'full-width' %}
+                                            {% set imageWidth = '1920w' %}
+                                        {% elseif templateType == '1-2_1-2' %}
+                                            {% set imageWidth = '1280w' %}
+                                        {% elseif templateType == '1-3_1-3_1-3' %}
+                                            {% set imageWidth = '800w' %}
+                                        {% elseif templateType == '2-3_1-3' and galleryIndex == '1' %}
+                                            {% set imageWidth = '1280w' %}
+                                        {% elseif templateType == '2-3_1-3' and galleryIndex == '2' %}
+                                            {% set imageWidth = '800w' %}
+                                        {% elseif templateType == '1-3_2-3' and galleryIndex == '1' %}
+                                            {% set imageWidth = '800w' %}
+                                        {% elseif templateType == '1-3_2-3' and galleryIndex == '2' %}
+                                            {% set imageWidth = '1280w' %}
+                                        {% endif %}
+
+                                        {% set imageFile = mediaData['jsonData']['imageFile-' ~ imageWidth] %}
+                                        {% set mimeType = mediaData['jsonData']['mimeType'] %}
+                                        {% set mimeType = mimeType|split('/') %}
+
+                                        {% if mimeType[0] == 'image' %}
+                                            <img data-sizes="auto"
+                                                data-src="{{ imageFile }}"
+                                                data-srcset="{{ imageFile }} {{ imageWidth }}"
+                                                class="d-block lazyload"
+                                                alt="{{ mediaData['jsonData']['mediaTitle'] }}" />
+                                        {% elseif mimeType[0] == 'video' %}
+                                            <video loop
+                                                muted
+                                                playsinline
+                                                class="d-block"
+                                                src="{{ mediaData['jsonData']['originalFile'] }}"></video>
+                                        {% endif %}
+                                    {% endif %}
+                                {% else %}
+                                    <!-- con slide -->
+                                    <div id="slide-home-{{ galleryIndex }}"
+                                        class="carousel slide"
+                                        data-bs-ride="carousel"
+                                        data-bs-interval="5000"
+                                        data-bs-pause="false">
+                                        <div class="carousel-inner">
+                                            {% for mediaData in gallery %}
+                                                {% if
+                                                    mediaData
+                                                        and mediaData['jsonData'] is defined
+                                                        and mediaData['jsonData'] is not empty %}
+                                                    {% if templateType == 'full-width' %}
+                                                        {% set imageWidth = '1920w' %}
+                                                    {% elseif templateType == '1-2_1-2' %}
+                                                        {% set imageWidth = '1280w' %}
+                                                    {% elseif templateType == '1-3_1-3_1-3' %}
+                                                        {% set imageWidth = '800w' %}
+                                                    {% elseif templateType == '2-3_1-3' and galleryIndex == '1' %}
+                                                        {% set imageWidth = '1280w' %}
+                                                    {% elseif templateType == '2-3_1-3' and galleryIndex == '2' %}
+                                                        {% set imageWidth = '800w' %}
+                                                    {% elseif templateType == '1-3_2-3' and galleryIndex == '1' %}
+                                                        {% set imageWidth = '800w' %}
+                                                    {% elseif templateType == '1-3_2-3' and galleryIndex == '2' %}
+                                                        {% set imageWidth = '1280w' %}
+                                                    {% endif %}
+
+                                                    {% set imageFile = mediaData['jsonData']['imageFile-' ~ imageWidth] %}
+
+                                                    <div class="carousel-item ratio {{ loop.first ? 'active' : '' }}">
+                                                        {% set mimeType = mediaData['jsonData']['mimeType'] %}
+                                                        {% set mimeType = mimeType|split('/') %}
+
+                                                        {% if mimeType[0] == 'image' %}
+                                                            <img data-sizes="auto"
+                                                                data-src="{{ imageFile }}"
+                                                                data-srcset="{{ imageFile }} {{ imageWidth }}"
+                                                                class="d-block {{
+                                                                isMobile(app.request.headers.get('User-Agent'))
+                                                                    ? 'movil'
+                                                                    : 'pc'
+                                                                }} lazyload"
+                                                                alt="{{ mediaData['jsonData']['mediaTitle'] }}" />
+                                                        {% elseif mimeType[0] == 'video' %}
+                                                            <video loop
+                                                                muted
+                                                                playsinline
+                                                                class="d-block {{
+                                                                isMobile(app.request.headers.get('User-Agent'))
+                                                                    ? 'movil'
+                                                                    : 'pc'
+                                                                }}"
+                                                                src="{{ mediaData['jsonData']['originalFile'] }}"></video>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+
+                                        {% if (gallery|length) > 1 %}
+                                            <button class="carousel-control-prev"
+                                                type="button"
+                                                data-bs-target="#slide-home-{{ galleryIndex }}"
+                                                data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next"
+                                                type="button"
+                                                data-bs-target="#slide-home-{{ galleryIndex }}"
+                                                data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                    <!-- end slide -->
+                                {% endif %}
+                            </figure>
+                        </div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        </section>
+
+        <div class="p-4 p-md-5 mb-4 rounded text-bg-dark">
+            <div class="col-md-6 px-0">
+                <h1 class="display-4 fst-italic">
+                    Title of a longer featured blog post
+                </h1>
+                <p class="lead my-3">
+                    Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.
+                </p>
+                <p class="lead mb-0">
+                    <a href="#" class="text-white fw-bold">Continue reading...</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mod-slider">
+                <div class="slider-home">
+                    {% if postsFeatured %}
+                        {% for post in postsFeatured %}
+                            {% if post and post.getThumbnailPhoto() %}
+                                <div class="item">
+                                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                                        <div class="col p-4 d-flex flex-column position-static">
+                                            {% if post.getPostCategories() %}
+                                                {% set postCategory = post.getPostCategories()|first %}
+                                                <strong class="d-inline-block mb-2 text-primary"><a href="#">{{ postCategory.getTitle() }}</a></strong>
+                                            {% endif %}
+
+                                            <h3 class="mb-0">
+                                                {{ post.getTitle() }}
+                                            </h3>
+                                            <div class="mb-1 text-muted">
+                                                {{ post.getPublishedAt()|date('d/m/Y') }}
+                                            </div>
+                                            <div class="card-text mb-auto truncate">
+                                                {{ post.getSummary()|raw }}
+                                            </div>
+                                            <a href="{{
+                                                path(
+                                                    'post-index-page',
+                                                    {
+                                                        slug: post.getSlug()
+                                                    }
+                                                )
+                                                }}"
+                                                class="stretched-link">
+                                                Continuar leyendo
+                                            </a>
+                                        </div>
+                                        <div class="col-auto d-none d-lg-block">
+                                            <img src="{{ vich_uploader_asset(post.getThumbnailPhoto(), 'imageFile800w') }}" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-5">
+            <div class="col-md-8">
+                {# <h3 class="pb-4 mb-4 fst-italic border-bottom">
+                    From the Firehose
+                </h3> #}
+
+                {% if lastNews %}
+                    {% for post in lastNews %}
+                        <article class="blog-post">
+                            <h2 class="blog-post-title mb-1">
+                                {{ post.getTitle() }}
+                            </h2>
+                            <p class="blog-post-meta">
+                                {{ post.getPublishedAt()|date('d/m/Y') }} por {{ post.getAuthor().getName() }}
+                            </p>
+
+                            <section class="mb-5">
+                                {{ post.getContent()|raw }}
+                            </section>
+                        </article>
+                    {% endfor %}
+                {% endif %}
+
+                <nav class="blog-pagination" aria-label="Pagination">
+                    <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
+                    <a class="btn btn-outline-secondary rounded-pill disabled">Newer</a>
+                </nav>
+            </div>
+
+            <div class="col-md-4">
+                <div class="position-sticky" style="top: 2rem;">
+                    <div class="p-4 mb-3 bg-light rounded">
+                        <h4 class="fst-italic">
+                            About
+                        </h4>
+                        <p class="mb-0">
+                            Customize this section to tell your visitors a little bit about your publication, writers, content, or something else entirely. Totally up to you.
+                        </p>
+                    </div>
+
+                    <div class="p-4">
+                        <h4 class="fst-italic">
+                            Archives
+                        </h4>
+                        <ol class="list-unstyled mb-0">
+                            <li><a href="#">March 2021</a></li>
+                            <li><a href="#">February 2021</a></li>
+                            <li><a href="#">January 2021</a></li>
+                            <li><a href="#">December 2020</a></li>
+                            <li><a href="#">November 2020</a></li>
+                            <li><a href="#">October 2020</a></li>
+                            <li><a href="#">September 2020</a></li>
+                            <li><a href="#">August 2020</a></li>
+                            <li><a href="#">July 2020</a></li>
+                            <li><a href="#">June 2020</a></li>
+                            <li><a href="#">May 2020</a></li>
+                            <li><a href="#">April 2020</a></li>
+                        </ol>
+                    </div>
+
+                    <div class="p-4">
+                        <h4 class="fst-italic">
+                            Elsewhere
+                        </h4>
+                        <ol class="list-unstyled">
+                            <li><a href="#">GitHub</a></li>
+                            <li><a href="#">Twitter</a></li>
+                            <li><a href="#">Facebook</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock main %}
+
+{# FOOTER #}
+{% block footer %}
+    {% include 'footer.html.twig' %}
+{% endblock footer %}
+{# / FOOTER #}

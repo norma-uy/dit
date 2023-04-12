@@ -1,0 +1,58 @@
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+    requirements:
+        _locale: es|en
+    trailing_slash_on_root: true
+
+app_logout:
+    path: /logout
+    methods: GET
+
+app_index:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+    defaults:
+        route: 'home-page'
+        # redirections are temporary by default (code 302) but you can make them permanent (code 301)
+        permanent: true
+        # add this to keep the original query string parameters when redirecting
+        keepQueryParams: true
+        # add this to keep the HTTP method when redirecting. The redirect status changes
+        # * for temporary redirects, it uses the 307 status code instead of 302
+        # * for permanent redirects, it uses the 308 status code instead of 301
+        keepRequestMethod: true
+
+app_admin_alt:
+    path: /admin
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+    defaults:
+        route: 'admin_dashboard'
+        # redirections are temporary by default (code 302) but you can make them permanent (code 301)
+        permanent: true
+        # add this to keep the original query string parameters when redirecting
+        keepQueryParams: true
+        # add this to keep the HTTP method when redirecting. The redirect status changes
+        # * for temporary redirects, it uses the 307 status code instead of 302
+        # * for permanent redirects, it uses the 308 status code instead of 301
+        keepRequestMethod: true
+
+app_locale:
+    path: /{_locale}
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+    defaults:
+        route: 'home-page'
+        # redirections are temporary by default (code 302) but you can make them permanent (code 301)
+        permanent: true
+        # add this to keep the original query string parameters when redirecting
+        keepQueryParams: true
+        # add this to keep the HTTP method when redirecting. The redirect status changes
+        # * for temporary redirects, it uses the 307 status code instead of 302
+        # * for permanent redirects, it uses the 308 status code instead of 301
+        keepRequestMethod: true
+
+nelmio_security:
+    path: /nelmio/csp/report
+    defaults:
+        { _controller: nelmio_security.csp_reporter_controller::indexAction }
+    methods: [POST]

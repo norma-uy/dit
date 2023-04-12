@@ -1,0 +1,150 @@
+@import './easyadmin-theme/variables-theme.scss';
+@import './easyadmin-theme/variables-bootstrap.scss';
+
+@import '~bootstrap/scss/bootstrap';
+
+@import '~@fortawesome/fontawesome-free/css/all.css';
+@import '~@fortawesome/fontawesome-free/css/v4-shims.css';
+@import '~@fortawesome/fontawesome-free/css/v5-font-face.css';
+
+@import './easyadmin-theme/theme.scss';
+
+.admin-language {
+    width: 100%;
+    padding: 5px 0 15px 0;
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    box-shadow: 0 1px 0 var(--content-top-border-color);
+
+    span {
+        font-size: 1rem;
+        margin-right: 10px;
+    }
+
+    section {
+        display: flex;
+        align-items: center;
+        flex-direction: row-reverse;
+    }
+
+    a {
+        color: #000;
+        font-weight: 300;
+        display: flex;
+        align-items: center;
+        opacity: 0.35;
+        margin-right: 15px;
+        text-decoration: none;
+
+        &.active {
+            font-weight: bold;
+            opacity: 1;
+
+            &:before {
+                width: 25px;
+                height: 25px;
+            }
+        }
+
+        &:before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 5px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .esp:before {
+        background-image: url(../images/lang/ES.svg);
+    }
+    .eng:before {
+        background-image: url(../images/lang/GB.svg);
+    }
+}
+
+.admin-language.active-es {
+    section {
+        flex-direction: inherit;
+    }
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+
+    a {
+        padding: 5px 10px;
+        margin: 0;
+    }
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: auto;
+    width: auto;
+
+    & > footer {
+        width: 100%;
+        height: auto;
+        min-height: 200px;
+        border-top: #e2e8f0 1px solid;
+    }
+}
+
+.modal-thumbnail {
+    .modal-content {
+        display: block;
+        background-color: transparent;
+        border: none;
+
+        img {
+            height: auto;
+            width: auto;
+            margin: auto;
+            position: absolute;
+            right: 0;
+            left: 0;
+        }
+
+        video {
+            width: 100%;
+        }
+    }
+}
+
+#Model_metadata {
+    display: flex;
+    gap: 10px;
+}
+
+.field-association {
+    .ts-dropdown-content {
+        max-height: 400px;
+    }
+}
+
+@media screen and (max-width: 460px) {
+    .modal-thumbnail {
+        .modal-content {
+            img {
+                width: 100%;
+            }
+
+            video {
+                width: 100%;
+            }
+        }
+    }
+}

@@ -1,0 +1,219 @@
+@import '~tinymce/skins/content/default/content.css';
+
+.tox {
+    .tox-dialog--width-lg {
+        height: auto !important;
+    }
+
+    .gallery-form-container {
+        select,
+        h5,
+        legend,
+        label,
+        p {
+            color: #000;
+        }
+
+        .loader {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(204, 204, 204, 0.4);
+            z-index: 9999;
+
+            .spinner-border {
+                position: absolute;
+                right: 0;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                margin: auto;
+            }
+            &.active {
+                display: block;
+            }
+        }
+    }
+
+    .gallery-column-btns {
+        display: flex;
+
+        .column-btns {
+            display: none;
+            width: 100%;
+
+            &.active {
+                display: block;
+
+                button {
+                    color: #1e293b;
+                    background-color: transparent;
+                    border: 1px solid #ced4da;
+                    border-radius: 4px;
+                    width: 100%;
+                    padding: 10px;
+
+                    &.active {
+                        border: 1px solid #006ce7;
+                        font-weight: bold;
+                    }
+
+                    &:hover {
+                        border: 1px solid #006ce7;
+                    }
+                }
+            }
+        }
+    }
+
+    .media-list,
+    .image-picker-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 20px 0 20px 0;
+        background-color: rgba(204, 204, 204, 0.3333333333);
+        min-height: 200px;
+        align-items: center;
+
+        .media-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 4px solid transparent;
+            border-radius: 5px;
+            padding: 2px !important;
+            flex-shrink: 0;
+            margin: 2px;
+            background-color: #fff;
+
+            &.selected {
+                border: 4px solid #006ce7;
+
+                .check-icon {
+                    visibility: visible;
+                }
+            }
+
+            &:hover {
+                cursor: pointer;
+                border: 4px solid #006ce7;
+            }
+
+            figure {
+                display: flex;
+                width: 100% !important;
+                margin: 0 auto;
+
+                img {
+                    width: 120px;
+                    height: 120px;
+                    object-fit: cover;
+                    margin: auto;
+                }
+            }
+
+            .form-check {
+                position: absolute;
+                visibility: hidden;
+                height: 0;
+                width: 0;
+                padding: 0;
+                margin: 0;
+
+                label {
+                    display: none;
+                }
+            }
+
+            .check-icon {
+                height: 30px;
+                width: 30px;
+                padding: 6px;
+                margin: 2px;
+                display: inherit;
+                background-color: #fff;
+                border: 1px solid #006ce7;
+                z-index: 99;
+
+                i {
+                    color: #006ce7;
+                    z-index: 0;
+                }
+            }
+        }
+
+        .media-empty {
+            margin: auto;
+        }
+    }
+
+    .media-list {
+        .media-item {
+            width: 130px;
+            height: 170px;
+            .order {
+                display: block;
+                width: 90px;
+                margin: 0 auto;
+            }
+        }
+    }
+
+    .image-picker-list {
+        .media-item {
+            width: 130px;
+            height: 132px;
+            .order {
+                display: none;
+                width: 90px;
+                margin: 0 auto;
+            }
+        }
+    }
+
+    .category-list {
+        width: 100%;
+
+        .category-item {
+            margin-bottom: 4px;
+
+            button {
+                color: #1e293b;
+                background-color: transparent;
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                width: 100%;
+                padding: 10px;
+
+                &.active {
+                    border: 1px solid #006ce7;
+                    font-weight: bold;
+                }
+
+                &:hover {
+                    border: 1px solid #006ce7;
+                }
+            }
+        }
+    }
+
+    .gallery-media-block {
+        img {
+            max-width: 150px;
+        }
+
+        figure {
+            display: block;
+        }
+
+        .carousel-inner {
+            display: flex;
+        }
+    }
+}

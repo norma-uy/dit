@@ -1,0 +1,83 @@
+<div class="header">
+    <div class="controls">
+        <button type="button" class="btn-close"></button>
+    </div>
+    <div class="filters">
+        {% if mediaCategories %}
+            <div class="row category-list">
+                {% for mediaCategory in mediaCategories %}
+                    <div class="col-auto category-item">
+                        <button type="button"
+                            class="{{ categoryId == mediaCategory.getId() ? 'active' : '' }}"
+                            data-id="{{ mediaCategory.getId() }}">
+                            {{ mediaCategory.getTitle() }}
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+<div class="body">
+    <div class="image-picker-list col-12">
+        {% include 'admin/mediaLibrary/media_items.html.twig' %}
+    </div>
+    <nav class="w-100 my-4" aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if previousPage %}
+                <li class="page-item">
+                    <a class="page-link"
+                        href="#{{ previousPage }}"
+                        data-page="{{ previousPage }}"
+                        aria-label="Previous">
+                        <span aria-hidden="true"><i class="fa-solid fa-backward-step"></i></span>
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if pagesCount > 0 %}
+                {% set pageRange = 5 %}
+                {% set pageRange = pagesCount <= pageRange ? pagesCount : pageRange %}
+
+                {% set lastPage = pageRange > 1 and pageRange < pagesCount ? pageRange + nextPage : pagesCount %}
+                {% set firstPage = previousPage > 2 ? previousPage : 1 %}
+                {% set firstPage = lastPage > pagesCount ? pagesCount - pageRange - 1 : firstPage %}
+                {% set lastPage = lastPage >= pagesCount ? pagesCount : lastPage %}
+
+                {% if firstPage > 2 %}
+                    <li class="page-item"><a class="page-link" href="#1" data-page="1">1</a></li>
+                    <li class="page-item" style="display: flex;flex-wrap: wrap;align-content: center;">
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </li>
+                {% endif %}
+
+                {% for page in firstPage..lastPage %}
+                    <li class="page-item {{ currentPage == page ? 'active' : '' }}">
+                        <a class="page-link" href="#{{ page }}" data-page="{{ page }}">{{ page }}</a>
+                    </li>
+                {% endfor %}
+
+                {% if lastPage < pagesCount %}
+                    <li class="page-item" style="display: flex;flex-wrap: wrap;align-content: center;">
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#{{ pagesCount }}" data-page="{{ pagesCount }}">{{ pagesCount }}</a>
+                    </li>
+                {% endif %}
+            {% endif %}
+
+            {% if nextPage > 1 and nextPage <= pagesCount %}
+                <li class="page-item">
+                    <a class="page-link" href="#{{ nextPage }}" data-page="{{ nextPage }}" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-forward-step"></i></span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+<div class="footer">
+    <button type="button" class="btn btn-primary" id="image-picker-add-btn">Añadir</button>
+</div>

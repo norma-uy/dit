@@ -1,0 +1,47 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+{% set html_id = 'ea-lightbox-' ~ field.uniqueId %}
+{% set media = instanceOf(field.value, 'App\\Entity\\Media') ? field.value : null %}
+{% set mimeType = media ? media.getMimeType()|split('/') : null %}
+
+{% if mimeType is not empty and mimeType[0] in ['image', 'video'] %}
+    {% if mimeType[0] == 'image' %}
+        <a href="#" class="ea-lightbox-thumbnail" data-bs-toggle="modal" data-bs-target="#{{ html_id }}">
+            <img src="{{ vich_uploader_asset(media, 'imageFile150w') }}" class="img-fluid" />
+        </a>
+
+        <div class="modal fade modal-thumbnail" id="{{ html_id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <img src="{{ vich_uploader_asset(media, 'imageFile450w') }}" />
+                </div>
+            </div>
+        </div>
+    {% elseif mimeType[0] == 'video' %}
+        <a href="#" class="ea-lightbox-thumbnail" data-bs-toggle="modal" data-bs-target="#{{ html_id }}">
+            <video loop
+                muted
+                src="{{ vich_uploader_asset(media, 'originalFile') }}"
+                style="width: 80px; margin-right:10px;"></video>
+        </a>
+
+        <div class="modal fade modal-thumbnail" id="{{ html_id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <video loop muted src="{{ vich_uploader_asset(media, 'originalFile') }}" controls></video>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% else %}
+    {% if 'toMany' == field.customOptions.get('associationType') %}
+        <span class="badge badge-secondary">{{ field.formattedValue }}</span>
+    {% else %}
+        {% if field.customOptions.get('relatedUrl') is not null %}
+            <a href="{{ field.customOptions.get('relatedUrl') }}">{{ field.formattedValue }}</a>
+        {% else %}
+            {{ field.formattedValue }}
+        {% endif %}
+    {% endif %}
+{% endif %}

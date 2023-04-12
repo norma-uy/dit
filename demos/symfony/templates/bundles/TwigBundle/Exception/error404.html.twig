@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'page.error404.title'|trans }}
+{% endblock title %}
+
+{% block stylesheets %}
+    {% for cssFile in encore_entry_css_files('global', 'website-config') %}
+        <link rel="stylesheet" href="{{ cssFile }}" />
+    {% endfor %}
+{% endblock stylesheets %}
+
+{% block header %}
+    <div class="header">
+        {# LOGO #}
+        <h1>
+            {{ 'page.error404.title'|trans }}
+        </h1>
+        {# NAV #}
+    </div>
+{% endblock header %}
+
+{% block main %}
+    <h1>
+        {{ status_code }} {{ status_text }}
+    </h1>
+
+    <p>
+        <a href="{{ path('home-page') }}">Página de inicio</a>.
+    </p>
+{% endblock main %}
+
+{# FOOTER #}
+{% block footer %}
+    <div class="footer"></div>
+{% endblock footer %}
+{# / FOOTER #}

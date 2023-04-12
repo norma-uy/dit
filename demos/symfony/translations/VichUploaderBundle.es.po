@@ -1,0 +1,11 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+
+msgid "vich_uploader.form_label.delete_confirm"
+msgstr "Borrar"
+
+msgid "vich_uploader.link.download"
+msgstr "Descargar"

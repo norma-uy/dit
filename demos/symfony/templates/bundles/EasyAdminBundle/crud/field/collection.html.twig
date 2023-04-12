@@ -1,0 +1,28 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+{# this is a bit ugly, but Twig doesn't have a 'is numeric' test #}
+{# <ol>
+    {% for key, value in _context  %}
+      <li>{{ key }}</li>
+    {% endfor %}
+</ol> #}
+{% if entity.getFqcn() == 'App\\Entity\\MediaCollection' %}
+    {% for media in entity.instance.getMediaList() %}
+        {% set mimeType = media.getMimeType()|split('/') %}
+
+        {% if mimeType[0] == 'image' %}
+            <img src="{{ vich_uploader_asset(media, 'imageFile150w') }}" class="img-fluid w-25" />
+        {% elseif mimeType[0] == 'video' %}
+            <video loop muted src="{{ vich_uploader_asset(media, 'originalFile') }}" style="width: 80px;"></video>
+        {% else %}
+            <span class="badge badge-secondary">{{ media.getTitle() }}</span>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    {% if field.formattedValue matches '/^\\d+$/' %}
+        <span class="badge badge-secondary">{{ field.formattedValue }}</span>
+    {% else %}
+        {{ field.formattedValue }}
+    {% endif %}
+{% endif %}

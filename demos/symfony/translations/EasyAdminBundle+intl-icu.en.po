@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+msgid "login_page.username"
+msgstr "__login_page.username"
+
+msgid "login_page.password"
+msgstr "__login_page.password"
+
+msgid "login_page.forgot_password"
+msgstr "__login_page.forgot_password"
+
+msgid "login_page.remember_me"
+msgstr "__login_page.remember_me"
+
+msgid "login_page.sign_in"
+msgstr "__login_page.sign_in"
+
+msgid "user.logged_in_as"
+msgstr "__user.logged_in_as"
+
+msgid "user.anonymous"
+msgstr "__user.anonymous"
+
+msgid "settings.locale"
+msgstr "__settings.locale"
+
+msgid "settings.appearance.label"
+msgstr "__settings.appearance.label"
+
+msgid "settings.appearance.light"
+msgstr "__settings.appearance.light"
+
+msgid "settings.appearance.dark"
+msgstr "__settings.appearance.dark"
+
+msgid "settings.appearance.auto"
+msgstr "__settings.appearance.auto"
+
+msgid "action.search"
+msgstr "__action.search"

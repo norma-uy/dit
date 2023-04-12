@@ -1,0 +1,73 @@
+<div class="container">
+	<nav>
+		<div class="nav nav-tabs my-2" id="nav-tab" role="tablist">
+			<button class="nav-link py-1 px-4 active" id="nav-select-media-tab" data-bs-toggle="tab" data-bs-target="#nav-select-media" type="button" role="tab" aria-controls="nav-select-media" aria-selected="false">Seleccionar</button>
+			<button class="nav-link py-1 px-4" id="nav-upload-media-tab" data-bs-toggle="tab" data-bs-target="#nav-upload-media" type="button" role="tab" aria-controls="nav-upload-media" aria-selected="true">Cargar nuevo archivo</button>
+		</div>
+	</nav>
+	<div class="tab-content my-2 px-2" id="nav-tabContent">
+		<div class="tab-pane fade show active" id="nav-select-media" role="tabpanel" aria-labelledby="nav-select-media-tab">
+
+			{{ form_start(simpleMediaChoiceForm, {'attr': {'class': 'gallery-form-container row'}}) }}
+
+			<div class="media-list col-md-9">
+				{% for mediaField in simpleMediaChoiceForm.mediaList %}
+
+					{% set index = mediaField.vars.value %}
+					{% set mediaEntity = simpleMediaChoiceForm.mediaList.vars.choices[index].data %}
+
+					{{ form_errors(mediaField) }}
+
+					<div class="media-item" id="{{ 'media-item-' ~ mediaField.vars.id }}" data-toggle="tooltip" data-placement="top" title="{{ mediaEntity.getTitle() }}">
+						<figure>
+							<img id="{{ 'thumbnail-' ~ mediaField.vars.id }}" src="{{ vich_uploader_asset(mediaEntity, 'imageFile450w') }}" alt="" data-id="{{ mediaField.vars.id }}">
+							{{ form_widget(mediaField, {
+								'attr': {
+									'class': 'media-check', 
+									'data-image-file-150w':  vich_uploader_asset(mediaEntity, 'imageFile150w'), 
+									'data-image-file-450w':  vich_uploader_asset(mediaEntity, 'imageFile450w'), 
+									'data-image-file-800w':  vich_uploader_asset(mediaEntity, 'imageFile800w'), 
+									'data-image-file-1280w':  vich_uploader_asset(mediaEntity, 'imageFile1280w'), 
+									'data-image-file-1600w':  vich_uploader_asset(mediaEntity, 'imageFile1600w'), 
+									'data-image-file-1920w':  vich_uploader_asset(mediaEntity, 'imageFile1920w'), 
+									'data-image-file-2400w':  vich_uploader_asset(mediaEntity, 'imageFile2400w'), 
+									'data-original-file':  vich_uploader_asset(mediaEntity, 'originalFile'), 
+									'data-media-title':  mediaEntity.getTitle() 
+								}}) }}
+						</figure>
+						<button type="button" class="check-icon" tabindex="0">
+							<i class="fa-solid fa-check"></i>
+						</button>
+					</div>
+				{% endfor %}
+			</div>
+
+			<div class="media-item-panel col-md-3">
+				<fieldset>
+					<legend>Datos extra</legend>
+					<h5 id="extra-data-media-title"></h5>
+					<div class="form-group">
+						<label for="extra-data-media-size">Ancho de la imagen</label>
+						<select class="form-select" id="extra-data-media-size" aria-label="Tamaño de la imagen">
+							<option value="original" selected>Original</option>
+							<option value="2400w">2400</option>
+							<option value="1920w">1920</option>
+							<option value="1600w">1600</option>
+							<option value="1280w">1280</option>
+							<option value="800w">800</option>
+							<option value="450w">450</option>
+							<option value="150w">150</option>
+						</select>
+					</div>
+				</fieldset>
+			</div>
+
+			{{ form_end(simpleMediaChoiceForm) }}
+		</div>
+		<div class="tab-pane fade" id="nav-upload-media" role="tabpanel" aria-labelledby="nav-upload-media-tab">
+			{{ form_start(uploadMediaUploadForm, {'attr': {'class': 'simple-media-upload-form'}}) }}
+
+			{{ form_end(uploadMediaUploadForm) }}
+		</div>
+	</div>
+</div>

@@ -1,0 +1,177 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'Blog Website'|trans }}
+{% endblock title %}
+
+{% block stylesheets %}
+    {% for cssFile in encore_entry_css_files('global', 'website-config') %}
+        <link rel="stylesheet" href="{{ cssFile }}" />
+    {% endfor %}
+    {% for cssFile in encore_entry_css_files('global-mobile', 'website-config') %}
+        <link rel="stylesheet" href="{{ cssFile }}" />
+    {% endfor %}
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {% for jsFile in encore_entry_js_files('app-contact', 'website-config') %}
+        {% cspscript %}
+        <script nonce="{{ csp_nonce('script') }}" src="{{ asset(jsFile) }}" defer></script>
+        {% endcspscript %}
+    {% endfor %}
+
+    <input type="hidden" id="recaptcha-site-key" value="{{ gg_recaptcha_site_key }}" />
+    {% for jsFile in encore_entry_js_files('app-recaptcha', 'website-config') %}
+        {% cspscript %}
+        <script nonce="{{ csp_nonce('script') }}" src="{{ asset(jsFile) }}" defer></script>
+        {% endcspscript %}
+    {% endfor %}
+    {% cspscript %}
+    <script nonce="{{ csp_nonce('script') }}"
+        type="text/javascript"
+        src="https://www.google.com/recaptcha/api.js?onload=onGoogleReCaptchaApiLoad&render=explicit&hl={{
+        app.request.locale
+        }}"
+        async
+        defer></script>
+    {% endcspscript %}
+{% endblock javascripts %}
+
+{% block header %}
+    {% include 'header.html.twig' %}
+{% endblock header %}
+
+{% block main %}
+    <section class="pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <header class="tit text-right mb-5">
+                        <h2 class="tx-color-3 display-6">
+                            {{ 'contacto'|trans }}
+                        </h2>
+                    </header>
+                </div>
+
+                <div class="col-md-6">
+                    <address class="contacto">
+                      
+                    </address>
+                </div>
+
+                <div class="col-md-6">
+                    {% if contactForm %}
+                        {% set formErrors = contactForm.vars.errors.form.getErrors(true) %}
+
+                        {% if (formErrors|length) > 0 or (app.flashes('contactErrorMsg')|length) > 0 %}
+                            <div class="alert alert-danger" role="alert">
+                                <ul>
+                                    {% for error in formErrors %}
+                                        <li>{{ error.message|trans }}</li>
+                                    {% endfor %}
+
+                                    {% for message in app.flashes('contactErrorMsg') %}
+                                        <li>{{ message|trans }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        {% for message in app.flashes('contactSuccessMsg') %}
+                            <div class="alert alert-success">
+                                {{ message|trans }}
+                            </div>
+                        {% endfor %}
+
+                        {{
+                            form_start(
+                                contactForm,
+                                {
+                                    attr: {
+                                        class: 'contacto needs-validated'
+                                    }
+                                }
+                            )
+                        }}
+
+                        {{
+                            form_widget(
+                                contactForm.name,
+                                {
+                                    attr: {
+                                        placeholder: 'Nombre'|trans,
+                                        'aria-label': 'Nombre'|trans
+                                    }
+                                }
+                            )
+                        }}
+
+                        {{
+                            form_widget(
+                                contactForm.email,
+                                {
+                                    attr: {
+                                        placeholder: 'E-mail'|trans,
+                                        'aria-label': 'E-mail'|trans
+                                    }
+                                }
+                            )
+                        }}
+
+                        {{
+                            form_widget(
+                                contactForm.phone,
+                                {
+                                    attr: {
+                                        placeholder: 'Teléfono'|trans,
+                                        'aria-label': 'Teléfono'|trans
+                                    }
+                                }
+                            )
+                        }}
+
+                        {{
+                            form_widget(
+                                contactForm.message,
+                                {
+                                    attr: {
+                                        placeholder: 'Mensaje'|trans,
+                                        'aria-label': 'Mensaje'|trans
+                                    }
+                                }
+                            )
+                        }}
+
+                        {{ form_row(contactForm.captcha) }}
+
+                        <button id="submit" type="submit" name="submit" class="submit">
+                            <span>{{ 'Enviar'|trans }}</span>
+                            <div class="spinner-border" role="status"></div>
+                        </button>
+
+                        {{
+                            form_end(
+                                contactForm,
+                                {
+                                    render_rest: true
+                                }
+                            )
+                        }}
+                    {% endif %}
+                </div>
+
+                <div class="col-12">
+                    <div class="mod-mapa" id="map">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock main %}
+
+{# FOOTER #}
+{% block footer %}
+    {% include 'footer.html.twig' %}
+{% endblock footer %}
+{# / FOOTER #}
