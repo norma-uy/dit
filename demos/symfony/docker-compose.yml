@@ -5,7 +5,7 @@ services:
         depends_on:
             - database
         build:
-            # context: ./.docker
+            context: ./.docker
             dockerfile: Dockerfile
             args:
                 PHP_VERSION: ${PHP_VERSION}
@@ -16,7 +16,6 @@ services:
         working_dir: /var/www/${WEBSITE_NAME}
         volumes:
             - ./:/var/www/${WEBSITE_NAME}/
-            - apache-cms-storage:/var/www/${WEBSITE_NAME}/public/storage/
 
     database:
         image: mysql:${DB_SERVER_VERSION}-debian
@@ -30,5 +29,4 @@ services:
             - mysql-cms-data:/var/lib/mysql
 
 volumes:
-    apache-cms-storage:
     mysql-cms-data:

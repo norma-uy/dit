@@ -1,0 +1,37 @@
+# COMPOSER
+/vendor
+
+# CRAFT STORAGE
+/craft/storage/*
+/storage/*
+
+# Public
+/public/build/*
+/public/bundle/*
+
+# Templates
+/templates/bundles/EasyAdminBundle/layout.html.twig
+/templates/bundles/EasyAdminBundle/page/login_minimal.html.twig
+/templates/bundles/EasyAdminBundle/crud/action.html.twig
+/templates/bundles/EasyAdminBundle/crud/detail.html.twig
+/templates/bundles/EasyAdminBundle/crud/form_theme.html.twig
+/templates/bundles/EasyAdminBundle/crud/index.html.twig
+/templates/bundles/EasyAdminBundle/includes/_css_assets.html.twig
+/templates/bundles/EasyAdminBundle/includes/_js_assets.html.twig
+/templates/bundles/EasyAdminBundle/symfony-form-themes/bootstrap_5_layout.html.twig
+/templates/bundles/EasyAdminBundle/symfony-form-themes/bootstrap_base_layout.html.twig
+/templates/bundles/EasyAdminBundle/symfony-form-themes/form_div_layout.html.twig
+/templates/bundles/EasyAdminBundle/exception.html.twig
+/templates/bundles/EasyAdminBundle/welcome.html.twig
+
+# BUILD FILES
+/bower_components/*
+/node_modules/*
+/build/*
+/yarn-error.log
+/var
+
+.vscode
+.history
+
+LICENSE
